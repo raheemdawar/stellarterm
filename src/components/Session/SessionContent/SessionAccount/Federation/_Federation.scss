@@ -1,0 +1,39 @@
+.Session__federations__block {
+  border-top: 1px solid #ddd;
+  position: relative;
+  width: 980px;
+  left: calc(-18px);
+  padding: 20px 16px;
+  padding-bottom: 0px;
+}
+
+.Session__federations__alert {
+  display: flex;
+  justify-content: space-between;
+  line-height: 60px;
+}
+
+.Session__federations__button {
+  padding: 0.3333em 2em 0.3333em 2em;
+  border-radius: 2px;
+  font-weight: normal;
+}
+
+.federation-icon {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+}
+
+.federation-warning {
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.federations-warning-text {
+  height: 24px;
+  line-height: 24px;
+  vertical-align: middle;
+  color: #e33c4c;
+  font-weight: normal;
+}
