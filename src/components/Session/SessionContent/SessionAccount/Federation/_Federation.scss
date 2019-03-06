@@ -1,4 +1,4 @@
-.Session__federations__block {
+.Federations_block {
   border-top: 1px solid #ddd;
   position: relative;
   width: 980px;
@@ -7,33 +7,47 @@
   padding-bottom: 0px;
 }
 
-.Session__federations__alert {
+.Federations_alert {
   display: flex;
   justify-content: space-between;
-  line-height: 60px;
+  padding: 1.2em 1em;
+  height: 100%;
 }
 
-.Session__federations__button {
-  padding: 0.3333em 2em 0.3333em 2em;
-  border-radius: 2px;
+.Federations_alert button {
+  padding: 0.3333em 1.8em 0.3333em 1.8em;
   font-weight: normal;
+  border-radius: 2px;
 }
 
-.federation-icon {
-  width: 24px;
+.Federation_button_transparent {
+  background-color: Transparent;
+  color: #69c76f;
+}
+
+.Federation_warning {
+  margin-bottom: 0.5em;
+}
+
+.Federation_icon {
   height: 24px;
+  margin-left: -3px;
   vertical-align: middle;
 }
 
-.federation-warning {
-  vertical-align: middle;
-  display: inline-block;
-}
-
-.federations-warning-text {
+.Federations_warning_text {
   height: 24px;
   line-height: 24px;
   vertical-align: middle;
   color: #e33c4c;
   font-weight: normal;
+}
+
+.Federations_left {
+  height: 36px;
+  line-height: 36px;
+}
+
+.Federations_right button:first-child{
+  margin-right: 10px;
 }
