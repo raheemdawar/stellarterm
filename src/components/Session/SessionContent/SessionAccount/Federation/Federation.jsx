@@ -1,6 +1,7 @@
 import React from 'react';
 import images from '../../../../../images';
 import FederationInpit from './FederationInput/FederationInput';
+import CopyButton from '../../../../CopyButton';
 
 export default class Federation extends React.Component {
     constructor(props) {
@@ -9,8 +10,83 @@ export default class Federation extends React.Component {
         this.state = {
             isEnabled: false,
             isEditing: false,
-            addressInUse: true,
+            addressInUse: false,
+            address: 'syllik',
         };
+    }
+
+    getContent() {
+        const { isEditing, isEnabled, address } = this.state;
+
+        const userWantToEditAddress = address !== '' ? address : '';
+
+        let left;
+        if (!isEditing && !isEnabled) {
+            left = (
+                <React.Fragment>
+                    <p className="no_federation_text">StellarTerm federation address</p>
+                </React.Fragment>
+            );
+        } else if (isEditing) {
+            left = (
+                <React.Fragment>
+                    <p>New federation address</p>
+                    <FederationInpit address={userWantToEditAddress} />
+                </React.Fragment>
+            );
+        } else if (isEnabled && !isEditing) {
+            left = (
+                <React.Fragment>
+                    <p>Your StellarTerm federation address</p>
+                    <strong onClick={() => this.handleEdit()}>syllik*stellarterm.com</strong>
+                </React.Fragment>
+            );
+        }
+
+        let right;
+        if (isEditing) {
+            right = (
+                <React.Fragment>
+                    <button className="b_transparent" onClick={() => this.handleEdit()}>
+                        Cancel
+                    </button>
+                    <button className="s-button" onClick={() => this.handleSave()}>
+                        Save
+                    </button>
+                </React.Fragment>
+            );
+        } else if (!isEditing && !isEnabled) {
+            right = (
+                <button className="s-button" onClick={() => this.handleEdit()}>
+                    Enable
+                </button>
+            );
+        } else if (!isEditing && isEnabled) {
+            right = (
+                <React.Fragment>
+                    <div className="CopyButton" onClick={() => this.handleEdit()}>
+                        <img src={images['icon-edit']} alt="edit" width="24" height="24" />
+                        <span>EDIT</span>
+                    </div>
+                    <CopyButton text={address} />
+                </React.Fragment>
+            );
+        }
+
+        return (
+            <React.Fragment>
+                <div className="Account_alert_left">{left}</div>
+                <div className="Account_alert_right">{right}</div>
+            </React.Fragment>
+        );
+    }
+
+    handleEdit() {
+        this.setState({ isEditing: !this.state.isEditing });
+    }
+
+    handleSave() {
+        this.setState({ isEnabled: true, isEditing: false });
     }
 
     checkForAddress() {
@@ -19,92 +95,30 @@ export default class Federation extends React.Component {
             return (
                 <p className="Federation_warning">
                     <span>
-                        <img src={images['icon-error-triangle']} className="Federation_icon" alt="Error" />
+                        <img src={images['icon-error-triangle']} alt="Error" />
                     </span>
-                    <span className="Federations_warning_text">
-                        This federation address is already in use. Please choose a different alias.
-                    </span>
+                    <span>This federation address is already in use.Please choose a different alias.</span>
                 </p>
             );
         }
         return null;
     }
 
-    handleEdit() {
-        this.setState({ isEditing: !this.state.isEditing });
-    }
-
-    handleSave() {
-        this.setState({ isEnabled: true });
-    }
-
     render() {
-        const { isEditing, isEnabled } = this.state;
         const addressIsBusy = this.checkForAddress();
+        const content = this.getContent();
 
         return (
             <div className="Federations_block">
-                <div className="s-alert s-alert--primary Federations_alert">
-                    {isEditing ? (
-                        <React.Fragment>
-                            <p className="Sesssion__yourId__title">New federation address</p>
-                            <FederationInpit />
-                        </React.Fragment>
-                    ) : (
-                        <div className="Federations_left">StellarTerm federation address</div>
-                    )}
+                <div className="Account_alert">{content}</div>
 
-                    {isEnabled ? (
-                        <React.Fragment>
-                            <p className="Sesssion__yourId__title">Your StellarTerm federation address</p>
-                            <strong className="Sesssion__yourId__accountId">
-                                alexey.s@razortheory.com*stellarterm.com
-                            </strong>
-                        </React.Fragment>
-                    ) : null}
+                {addressIsBusy}
 
-                    <div className="Federations_right">
-                        {isEditing ? (
-                            <React.Fragment>
-                                <button
-                                    className="s-button Federation_button_transparent"
-                                    onClick={() => this.handleEdit()}>
-                                    Cancel
-                                </button>
-                                <button className="s-button Federations_button" onClick={() => this.handleSave()}>
-                                    Save
-                                </button>
-                            </React.Fragment>
-                        ) : (
-                            <button className="s-button Federations_button" onClick={() => this.handleEdit()}>
-                                Enable
-                            </button>
-                        )}
-
-                        {isEnabled ? (
-                            <React.Fragment>
-                                <button className="s-button Federation_button_transparent">
-                                    {' '}
-                                    <img src={images['icon-edit']} className="Federation_icon" alt="Error" />
-                                    Edit
-                                </button>
-                                <button className="s-button Federations_button">
-                                    {' '}
-                                    <img src={images['icon-copy']} className="Federation_icon" alt="Error" />
-                                    Copy
-                                </button>
-                            </React.Fragment>
-                        ) : null}
-                    </div>
-                </div>
-                <div className="Session__account__text">
-                    {addressIsBusy}
-                    <p>
-                        You can set an alias for your StellarTerm account. We’ll use this in our trollbox, and it will
-                        become your payment alias, so people can send you money more easily. You can use this alias,
-                        including the*stellarx.com, instead of your public key to receive payments on Stellar.
-                    </p>
-                </div>
+                <p className="AccountView_text">
+                    You can set an alias for your StellarTerm account. We’ll use this in our trollbox, and it will
+                    become your payment alias, so people can send you money more easily. You can use this alias,
+                    including the*stellarx.com, instead of your public key to receive payments on Stellar.
+                </p>
             </div>
         );
     }

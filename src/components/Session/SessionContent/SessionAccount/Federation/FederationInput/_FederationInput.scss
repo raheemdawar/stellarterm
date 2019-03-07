@@ -1,18 +1,27 @@
-.Federation_input > input {
-  font-size: 24px;
-  padding: 0;
-  color: #505558;
-  font-weight: 600;
-  background: transparent;
-  border: none;
-  min-width: 50px !important;
-  max-width: 99.99% !important;
-  transition: width 0.25s;
-}
+.Federation_input {
+  input {
+    font-size: 24px;
+    padding: 0;
+    color: #505558;
+    font-weight: 600;
+    background: transparent;
+    border: none;
 
-.Federation_input > span {
-  font-size: 24px;
-  color: #505558;
-  font-weight: 600;
-  opacity: 0.3;
+    &:focus {
+      outline: none;
+    }
+    &::placeholder {
+      opacity: 0.85;
+    }
+    &::-ms-clear {
+      display: none;
+    }
+  }
+
+  span {
+    font-size: 24px;
+    color: #505558;
+    font-weight: 600;
+    opacity: 0.3;
+  }
 }

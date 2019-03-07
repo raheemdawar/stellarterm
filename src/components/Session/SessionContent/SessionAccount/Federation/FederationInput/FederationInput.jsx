@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import AutosizeInput from 'react-input-autosize';
 
 export default class FederationInpit extends React.Component {
@@ -6,7 +7,7 @@ export default class FederationInpit extends React.Component {
         super(props);
 
         this.state = {
-            inputValue: '',
+            inputValue: this.props.address,
         };
     }
 
@@ -22,13 +23,21 @@ export default class FederationInpit extends React.Component {
                 <AutosizeInput
                     type="text"
                     name="inputPriceAsset"
-                    className="Federation_input"
-                    placeholder="Type here..."
+                    placeholder="Name..."
+                    maxLength="32"
+                    autoFocus
                     value={inputValue}
                     onChange={e => this.handleInput(e)}
-                    autoFocus />
+                    onFocus={(e) => {
+                        e.target.value = '';
+                        e.target.value = e.target.value;
+                    }} />
                 <span>*stellarterm.com</span>
             </div>
         );
     }
 }
+
+FederationInpit.propTypes = {
+    address: PropTypes.string.isRequired,
+};

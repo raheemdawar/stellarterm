@@ -1,53 +1,72 @@
+@import "./FederationInput/FederationInput";
+
 .Federations_block {
-  border-top: 1px solid #ddd;
-  position: relative;
-  width: 980px;
-  left: calc(-18px);
-  padding: 20px 16px;
-  padding-bottom: 0px;
-}
+    border-top: 1px solid #ddd;
+    position: relative;
+    width: 980px;
+    left: calc(-18px);
+    padding: 20px 16px;
+    padding-bottom: 0px;
 
-.Federations_alert {
-  display: flex;
-  justify-content: space-between;
-  padding: 1.2em 1em;
-  height: 100%;
-}
+    .Account_alert {
+        button {
+            width: 108px;
+            padding: 0.4em 1.8em 0.4em 1.8em;
+            font-weight: normal;
+            border-radius: 2px;
+            box-shadow: none;
+        }
 
-.Federations_alert button {
-  padding: 0.3333em 1.8em 0.3333em 1.8em;
-  font-weight: normal;
-  border-radius: 2px;
-}
+        button.b_transparent {
+            border: solid 1px #5eb464;
+            background-color: Transparent;
+            color: #69c76f;
+        }
+        button.b_transparent:hover {
+            background-color: Transparent;
+            border: solid 1px #69c76f;
+            color: #69c76f;
+        }
+        button.b_transparent:active {
+            opacity: 0.9;
+            border: solid 1px #5eb464;
+            color: #5eb464;
+        }
+    }
 
-.Federation_button_transparent {
-  background-color: Transparent;
-  color: #69c76f;
-}
+    .Account_alert_left {
+        .no_federation_text {
+            display: flex;
+            height: 100%;
+            align-items: center;
+        }
+    }
 
-.Federation_warning {
-  margin-bottom: 0.5em;
-}
+    .Account_alert_right {
+        button {
+            margin-left: 1.25em;
 
-.Federation_icon {
-  height: 24px;
-  margin-left: -3px;
-  vertical-align: middle;
-}
+            &:last-child {
+                margin-right: 1.25em;
+            }
+        }
+    }
 
-.Federations_warning_text {
-  height: 24px;
-  line-height: 24px;
-  vertical-align: middle;
-  color: #e33c4c;
-  font-weight: normal;
-}
+    .Federation_warning {
+        margin-bottom: 0.3em;
+        padding: 0 0 0 17px;
+        color: #e33c4c;
+        font-weight: normal;
 
-.Federations_left {
-  height: 36px;
-  line-height: 36px;
-}
+        span {
+            height: 24px;
+            line-height: 24px;
+            display: inline-block;
+            vertical-align: middle;
 
-.Federations_right button:first-child{
-  margin-right: 10px;
+            img {
+                height: inherit;
+            }
+        }
+    }
 }
