@@ -14,6 +14,8 @@ export default class AssetDropDown extends React.Component {
             isFocused: false,
             code: '',
             termAsset: null,
+            activeCardIndex: null,
+            enterClick: false,
         };
         this.handleClickOutside = (e) => {
             if (this.node.contains(e.target)) {
@@ -26,6 +28,7 @@ export default class AssetDropDown extends React.Component {
             this.setState({
                 isOpenList: false,
                 isFocused: false,
+                activeCardIndex: null,
             });
         };
     }
@@ -46,6 +49,45 @@ export default class AssetDropDown extends React.Component {
             isFocused: false,
         });
     }
+
+    setActiveCardIndex(e) {
+        const { activeCardIndex } = this.state;
+        if (e.keyCode === 40) {
+            if (activeCardIndex === null) {
+                this.setState({ activeCardIndex: 0 });
+            } else {
+                this.setState({ activeCardIndex: activeCardIndex + 1 });
+            }
+        }
+        if (e.keyCode === 38) {
+            if (activeCardIndex === null) {
+                this.setState({ activeCardIndex: -1 });
+            } else {
+                this.setState({ activeCardIndex: activeCardIndex - 1 });
+            }
+        }
+        if (e.keyCode === 13) {
+            if (this.state.activeCardIndex !== null) {
+                this.setState({ enterClick: true });
+            }
+        }
+    }
+
+    handleInput(e) {
+        e.preventDefault();
+        this.setState({
+            activeCardIndex: null,
+            code: e.target.value,
+        });
+    }
+
+    openListByFocus() {
+        this.setState({
+            isOpenList: true,
+            activeCardIndex: null,
+        });
+    }
+
     openList() {
         if (this.props.clear) {
             this.props.clear();
@@ -58,19 +100,11 @@ export default class AssetDropDown extends React.Component {
         this.setState({
             isOpenList: !this.state.isOpenList,
             isFocused: !this.state.isOpenList,
+            activeCardIndex: null,
+            enterClick: false,
         });
     }
-    openListByFocus() {
-        this.setState({
-            isOpenList: true,
-        });
-    }
-    handleInput(e) {
-        e.preventDefault();
-        this.setState({
-            code: e.target.value,
-        });
-    }
+
 
     render() {
         const name = this.props.isBase ? 'base' : 'counter';
@@ -96,6 +130,7 @@ export default class AssetDropDown extends React.Component {
                                 className="AssetDropDown__search"
                                 type="text"
                                 onChange={e => this.handleInput(e)}
+                                onKeyUp={e => this.setActiveCardIndex(e)}
                                 value={this.state.code}
                                 placeholder={`Set ${name} asset`} />
                         </div>
@@ -106,6 +141,8 @@ export default class AssetDropDown extends React.Component {
                     <AssetCardList
                         d={this.props.d}
                         onUpdate={(asset) => { this.onUpdate(asset); }}
+                        activeCardIndex={this.state.activeCardIndex}
+                        isEnterClick={this.state.enterClick}
                         code={this.state.code}
                         exception={this.props.exception} /> :
                     null

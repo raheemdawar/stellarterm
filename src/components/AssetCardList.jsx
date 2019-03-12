@@ -9,23 +9,28 @@ export default class AssetCardList extends React.Component {
     constructor(props) {
         super(props);
         this.dTicker = props.d.ticker;
-        this.listenId = this.dTicker.event.listen(() => { this.forceUpdate(); });
+        this.listenId = this.dTicker.event.listen(() => {
+            this.forceUpdate();
+        });
+    }
+
+    componentDidUpdate(prevProps) {
+        this.scrollToMyRef();
+        if (this.props.isEnterClick === true && prevProps.isEnterClick === false) {
+            this.handleChooseActiveAsset();
+        }
     }
 
     componentWillUnmount() {
         this.dTicker.event.unlisten(this.listenId);
     }
 
-    handleChoose(asset) {
-        this.props.onUpdate(new StellarSdk.Asset(asset.code, asset.issuer));
-    }
-
-    render() {
+    getFilterAssets() {
         const { assets } = this.dTicker.data;
         const { code, issuer } = this.props.exception || '';
         const isExceptionNative = this.props.exception && this.props.exception.isNative();
 
-        const rows = assets
+        return assets
             .filter((asset) => {
                 const { unlisted } = directory.getAssetByAccountId(asset.code, asset.issuer) || {};
                 const isAssetNative = new StellarSdk.Asset(asset.code, asset.issuer).isNative();
@@ -35,12 +40,56 @@ export default class AssetCardList extends React.Component {
                     ((asset.code.indexOf(this.props.code.toUpperCase()) > -1) ||
                       (asset.domain.indexOf(this.props.code.toLowerCase()) > -1))
                 );
-            })
-            .map(asset => (
-                    <div className="AssetCardList_card" key={asset.id} onClick={() => this.handleChoose(asset)}>
-                        <AssetCard2 code={asset.code} issuer={asset.issuer} boxy noborder />
-                    </div>
-            ));
+            });
+    }
+
+    getActiveIndex() {
+        const length = this.getFilterAssets().length;
+        const { activeCardIndex } = this.props;
+        if (length === 0) {
+            return null;
+        }
+        let index = activeCardIndex;
+        while (index < 0) {
+            index += length;
+        }
+        while (index > (length - 1)) {
+            index -= length;
+        }
+        return index;
+    }
+
+    scrollToMyRef() {
+        if (this.activeRef) {
+            this.activeRef.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }
+    }
+
+    handleChoose(asset) {
+        this.props.onUpdate(new StellarSdk.Asset(asset.code, asset.issuer));
+    }
+
+    handleChooseActiveAsset() {
+        const filterAssets = this.getFilterAssets();
+        const activeIndex = this.getActiveIndex();
+        if (filterAssets.length && (activeIndex !== null)) {
+            this.handleChoose(filterAssets[activeIndex]);
+        }
+    }
+
+    render() {
+        const filterAssets = this.getFilterAssets();
+        const activeIndex = this.getActiveIndex();
+
+        const rows = filterAssets.map((asset, index) => (
+            <div
+                className="AssetCardList_card"
+                key={asset.id}
+                ref={index === activeIndex ? (node) => { this.activeRef = node; } : null}
+                onClick={() => this.handleChoose(asset)}>
+                <AssetCard2 code={asset.code} issuer={asset.issuer} boxy noborder={index !== activeIndex} />
+            </div>
+        ));
 
         return (
             <div className="AssetCardList">
@@ -57,4 +106,6 @@ AssetCardList.propTypes = {
     onUpdate: PropTypes.func,
     code: PropTypes.string,
     exception: PropTypes.objectOf(PropTypes.string),
+    activeCardIndex: PropTypes.number,
+    isEnterClick: PropTypes.bool,
 };
